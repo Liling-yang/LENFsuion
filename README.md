@@ -37,11 +37,10 @@ The test data from the [KAIST](https://github.com/SoonminHwang/rgbt-ped-detectio
 
 
 ## If this work is helpful to you, please cite it as：
-> @article{Chen2024LENFusion,
-  title={LENFusion: A Joint Low-Light Enhancement and Fusion Network for Nighttime Infrared and Visible Image Fusion}, 
-  year={2024},
-  author={Chen, Jun and Yang, Liling and Liu, Wei and Tian, Xin and Ma, Jiayi},
-  journal={IEEE Transactions on Instrumentation and Measurement}, 
+>@article{Chen2024LENFusion,
+  title={LENFusion: A Joint Low-Light Enhancement and Fusion Network for Nighttime Infrared and Visible Image Fusion},
+  author={Tang, Linfeng and Xiang, Xinyu and Zhang, Hao and Gong, Meiqi and Ma, Jiayi},
+  journal={Chen, Jun and Yang, Liling and Liu, Wei and Tian, Xin and Ma, Jiayi},
   volume = {},
   pages = {},
   year = {2024}
