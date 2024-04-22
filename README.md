@@ -26,19 +26,30 @@ The test data from the [KAIST](https://github.com/SoonminHwang/rgbt-ped-detectio
 ## The Environment
 
 >numpy=1.26.0
+>
 >opencv-python=4.8.1.78
+>
 >python=3.10.13
+>
 >torch=1.12.1
+>
 >torchvision=0.13.1
 
 
 ## If this work is helpful to you, please cite it as：
 > @article{Chen2024LENFusion,
+> 
   title={LENFusion: A Joint Low-Light Enhancement and Fusion Network for Nighttime Infrared and Visible Image Fusion}, 
+  
   year={2024},
+  
   author={Chen, Jun and Yang, Liling and Liu, Wei and Tian, Xin and Ma, Jiayi},
+  
   journal={IEEE Transactions on Instrumentation and Measurement}, 
+  
   volume = {},
+  
   pages = {},
+  
   year = {2024}
 }
