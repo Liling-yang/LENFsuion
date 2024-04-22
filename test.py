@@ -173,7 +173,6 @@ def run_fusion_cpu():
     fusion_dir=osp.join(os.getcwd(),'test/LLVIP/')
     os.makedirs(fusion_dir, mode=0o777, exist_ok=True)
     fusionmodel = model.FusionNet()
-    # fusionmodel = fusionmodel.cuda()  # 移除.cuda()调用
     fusionmodel.eval()
     fusionmodel.load_state_dict(torch.load(fusion_model_path, map_location=torch.device('cpu')))
     enhance_model_path = osp.join(os.getcwd(),'checkpoint/enhancement_model.pth')
@@ -201,7 +200,10 @@ def run_fusion_cpu():
             _,enhanced_image,_ = enhancemodel(images_vis)
             image_vis_en_ycbcr = rgb2ycbcr(enhanced_image)
             image_vis_en_y=dataloader.clahe(image_vis_en_ycbcr[:,0:1,:,:],image_vis_en_ycbcr.shape[0])
+            fusionmodel = fusionmodel.to(torch.device('cpu'))
+            image_vis_en_y = image_vis_en_y.to(torch.device('cpu'))
             _,_,_,Y_f = fusionmodel(image_vis_en_y,images_ir)
+            image_vis_en_ycbcr = image_vis_en_ycbcr.to(torch.device('cpu'))
             fusion_ycbcr = torch.cat((Y_f,image_vis_en_ycbcr[:,1:2,:,:],image_vis_en_ycbcr[:,2:,:,:]),dim=1)
             I_f = ycbcr2rgb(fusion_ycbcr)
 
@@ -209,7 +211,7 @@ def run_fusion_cpu():
             zeros = torch.zeros_like(I_f)
             I_f = torch.where(I_f > ones, ones, I_f)
             I_f = torch.where(I_f < zeros, zeros, I_f)
-            I_f = I_f.numpy()  # 移至CPU上后，使用numpy()方法获取数据
+            I_f = I_f.numpy()
             for k in range(len(name)):
                 image_vis_en_ycbcr = image_vis_en_ycbcr[k,:,:,:].cpu()
                 fusion_ycbcr=fusion_ycbcr[k, :, :, :].cpu()
@@ -234,7 +236,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test for enhancement and fusion')
     parser.add_argument('--batch_size', '-B', type=int, default=8)
     parser.add_argument('--num_workers', '-j', type=int, default=8)
-    parser.add_argument('--use_gpu', action='store_true', default=True)
+    parser.add_argument('--use_gpu', default=True)
     args = parser.parse_args()
     logpath='./logs'
     logger = logging.getLogger()
@@ -246,7 +248,19 @@ if __name__ == "__main__":
         run_fusion_gpu()
         print("|啊哈哈|Fusion Image Sucessfully~!")
     else:
-        run_enhance_cpu()  
+        def ycbcr2rgb(input_im):
+            B, C, W, H = input_im.shape
+            im_flat = input_im.transpose(1, 3).transpose(1, 2).reshape(-1, 3)
+            mat = torch.tensor([[1.0, 1.0, 1.0], [1.403, -0.714, 0.0], [0.0, -0.344, 1.773]])
+            bias = torch.tensor([0.0 / 255, -0.5, -0.5])
+            mat = torch.tensor([[1.0, 1.0, 1.0], [1.403, -0.714, 0.0], [0.0, -0.344, 1.773]])
+            bias = torch.tensor([0.0 / 255, -0.5, -0.5])
+            temp = (im_flat + bias).mm(mat)
+            out = temp.reshape(B, W, H, C).transpose(1, 3).transpose(2, 3)
+            out = torch.clamp(out, min=0., max=1.0)
+            return out
+
+        run_enhance_cpu() 
         print("|Enhancement Image Sucessfully~!")
         run_fusion_cpu()
         print("|啊哈哈|Fusion Image Sucessfully~!")
