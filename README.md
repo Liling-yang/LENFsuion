@@ -42,7 +42,7 @@ The test data from the [KAIST](https://github.com/SoonminHwang/rgbt-ped-detectio
   title={LENFusion: A Joint Low-Light Enhancement and Fusion Network for Nighttime Infrared and Visible Image Fusion},
   author={Chen, Jun and Yang, Liling and Liu, Wei and Tian, Xin and Ma, Jiayi},
   journal={IEEE Transactions on Instrumentation and Measurement},
-  volume={},
-  pages={},
+  volume={73},
+  pages={1-15},
   year={2024}
 }
